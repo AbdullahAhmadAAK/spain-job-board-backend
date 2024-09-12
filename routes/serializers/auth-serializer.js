@@ -1,4 +1,4 @@
-const serializeAuthUser = (userAuth) => {
+const serializeLoginAuthUser = (userAuth) => {  
   const session = userAuth.session
   const token = formatJwtTokenFromSession(session) 
 
@@ -6,12 +6,23 @@ const serializeAuthUser = (userAuth) => {
   const user = formatUserDetails(userData)
 
   return {
-    token: token,
+    token_details: token,
+    user: user
+  }
+}
+
+const serializeSignupAuthUser = (userAuth) => {  
+  const userData = userAuth.user
+  const user = formatUserDetails(userData)
+
+  return {
     user: user
   }
 }
 
 const formatJwtTokenFromSession = (session) => {
+  // console.log('session in formatJwtTokenFromSession is: ', session);
+  
   return {
     token: session.access_token,
     expires_in: session.expires_in,
@@ -21,11 +32,11 @@ const formatJwtTokenFromSession = (session) => {
 
 const formatUserDetails = (userData) => {
   return {
-    email: userData.email,
-    role: userData.role
+    email: userData.email
   }
 }
 
 module.exports = {
-  serializeAuthUser
+  serializeSignupAuthUser,
+  serializeLoginAuthUser
 };
