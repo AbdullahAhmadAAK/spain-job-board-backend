@@ -18,8 +18,11 @@ app.use(cors());
 app.use(express.json())   
 
 app.use('/auth/users', usersAuthRouter)
+
+app.use('/users/jobs', authenticateToken, usersJobsRouter)
+
 app.use('/admin/jobs', authenticateToken, authorizeAdmin, adminJobsRouter)
-app.use('/jobs', authenticateToken, authorizeAdmin, usersJobsRouter)
+
 
 app.get('/', function (req, res) {
   res.send('Hello World!');

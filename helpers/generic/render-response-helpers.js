@@ -5,8 +5,8 @@ const renderSuccessResponse = (res, data) => {
   })
 }
 
-const renderErrorResponse = (res, errors) => {
-  return res.json({
+const renderErrorResponse = (res, errors, statusCode) => {
+  return res.status(statusCode).json({
     data: {},
     errors: errors
   })
