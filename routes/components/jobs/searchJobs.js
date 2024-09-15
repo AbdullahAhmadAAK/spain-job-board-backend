@@ -1,8 +1,10 @@
+const { findStartEndIndexes } = require('../pagination')
+
 // TODO: simplify and separate for users admins and superadmin
 const searchJobs = async (supabase, params) => {
+  const { page_no, records_per_page, min_budget, max_budget, search_query, difficulty_id, status_id } = params;
+  const { startingIndex, endingIndex } = findStartEndIndexes(page_no, records_per_page)
 
-  const { startingIndex, endingIndex, min_budget, max_budget, search_query, difficulty_id, status_id } = params;
-  
   let query = supabase
     .from('jobs')
     .select('id, title, description, min_budget, max_budget, difficulty_rating:job_difficulty_ratings(title, rating), status:statuses(title), proposals(*)')

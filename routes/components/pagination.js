@@ -5,10 +5,11 @@ const findStartEndIndexes = (pageNumber, recordsPerPage) => {
   return { startingIndex, endingIndex }
 }
 
-const validatePagination = (pageNumber, recordsPerPage) => {
-  if (!pageNumber || !recordsPerPage) {
+const validatePagination = (params) => {
+  const { page_no, records_per_page } = params
+  if (!page_no || !records_per_page) {
     return false
-  } else if (pageNumber <= 0 || recordsPerPage <= 0) {
+  } else if (page_no <= 0 || records_per_page <= 0) {
     return false
   } else {
     return true
