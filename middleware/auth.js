@@ -39,7 +39,8 @@ function authenticateToken(req, res, next) {
 function authorizeAdmin(req, res, next) {
   console.log('i came to auth admin');
   
-  if (req.user.role !== 'admin' && req.user.role !== 'superadmin') {
+  
+  if (req.user.user_profile.role.slug !== 'admin' && req.user.user_profile.role.slug !== 'superadmin') {
     return renderErrorResponse(res, ['Unauthorized'], 401)
   }
 
@@ -48,4 +49,15 @@ function authorizeAdmin(req, res, next) {
   }
 }
 
-module.exports = { authenticateToken, authorizeAdmin };
+function authorizeUser(req, res, next) {  
+  if (req.user.user_profile.role.slug !== 'freelancer') {
+    return renderErrorResponse(res, ['Unauthorized'], 401)
+  }
+
+  else {
+    next()
+  }
+}
+
+
+module.exports = { authenticateToken, authorizeAdmin, authorizeUser };

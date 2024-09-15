@@ -1,4 +1,7 @@
 const serializeLoginAuthUser = (userAuth) => {  
+
+  console.log('this is user auth: ', userAuth);
+  
   const session = userAuth.session
   const token = formatJwtTokenFromSession(session) 
 
@@ -24,7 +27,8 @@ const formatJwtTokenFromSession = (session) => {
   // console.log('session in formatJwtTokenFromSession is: ', session);
   
   return {
-    token: session.access_token,
+    jwt_token: session.access_token,
+    refresh_token: session.refresh_token,
     expires_in: session.expires_in,
     expires_at: session.expires_at
   }

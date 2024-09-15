@@ -2,7 +2,8 @@ require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
 
-const { authenticateToken, authorizeAdmin } = require('./middleware/auth')
+// TODO: rename admin to adminSuperadmin
+const { authenticateToken, authorizeAdmin, authorizeUser } = require('./middleware/auth')
 
 const usersAuthRouter = require('./routes/users/auth')
 
@@ -22,8 +23,8 @@ app.use(express.json())
 
 app.use('/auth/users', usersAuthRouter)
 
-app.use('/users/jobs', authenticateToken, usersJobsRouter)
-app.use('/users/proposals', authenticateToken, usersProposalsRouter)
+app.use('/users/jobs', authenticateToken, authorizeUser, usersJobsRouter)
+app.use('/users/proposals', authenticateToken, authorizeUser, usersProposalsRouter)
 
 app.use('/admin/jobs', authenticateToken, authorizeAdmin, adminJobsRouter)
 
