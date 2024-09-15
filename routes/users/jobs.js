@@ -1,6 +1,6 @@
-const { renderSuccessResponse, renderErrorResponse } = require('../helpers/supabase/generic/render-response-helpers');
-const { getSupabaseClientFromReq } = require('../helpers/supabase/generic/get-supabase-client')
-const { getReqBody } = require('../helpers/generic/get-req-body')
+const { renderSuccessResponse, renderErrorResponse } = require('../../helpers/generic/render-response-helpers');
+const { getSupabaseClientFromReq } = require('../../helpers/supabase/generic/get-supabase-client')
+const { getReqBody } = require('../../helpers/generic/get-req-body')
 
 const express = require('express');
 const router = express.Router();

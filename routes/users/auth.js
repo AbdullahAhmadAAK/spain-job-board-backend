@@ -1,8 +1,8 @@
-const { renderSuccessResponse, renderErrorResponse } = require('../helpers/supabase/generic/render-response-helpers');
-const { serializeLoginAuthUser, serializeSignupAuthUser } = require('../serializers/auth-serializer')
-const { getSupabaseClientFromReq } = require('../helpers/supabase/generic/get-supabase-client')
-const { signInSupabase, signUpSupabase } = require('../helpers/supabase/auth/user-auth-helpers')
-const { getReqBody } = require('../helpers/generic/get-req-body')
+const { renderSuccessResponse, renderErrorResponse } = require('../../helpers/generic/render-response-helpers');
+const { serializeLoginAuthUser, serializeSignupAuthUser } = require('../../serializers/users/auth-serializer')
+const { getSupabaseClientFromReq } = require('../../helpers/supabase/generic/get-supabase-client')
+const { signInSupabase, signUpSupabase } = require('../../helpers/supabase/auth/user-auth-helpers')
+const { getReqBody } = require('../../helpers/generic/get-req-body')
 
 const express = require('express');
 const router = express.Router();
