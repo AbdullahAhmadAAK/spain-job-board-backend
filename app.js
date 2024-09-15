@@ -5,8 +5,11 @@ const cors = require('cors');
 const { authenticateToken, authorizeAdmin } = require('./middleware/auth')
 
 const usersAuthRouter = require('./routes/users/auth')
+
 const adminJobsRouter = require('./routes/admin/jobs')
+
 const usersJobsRouter = require('./routes/users/jobs')
+const usersProposalsRouter = require('./routes/users/proposals')
 
 var express = require('express');
 var app = express();
@@ -20,6 +23,7 @@ app.use(express.json())
 app.use('/auth/users', usersAuthRouter)
 
 app.use('/users/jobs', authenticateToken, usersJobsRouter)
+app.use('/users/proposals', authenticateToken, usersProposalsRouter)
 
 app.use('/admin/jobs', authenticateToken, authorizeAdmin, adminJobsRouter)
 

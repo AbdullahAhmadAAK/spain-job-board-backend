@@ -1,5 +1,5 @@
-const renderSuccessResponse = (res, data) => {
-  return res.json({
+const renderSuccessResponse = (res, data, statusCode = 200) => {
+  return res.status(statusCode).json({
     data: data,
     errors: []
   })

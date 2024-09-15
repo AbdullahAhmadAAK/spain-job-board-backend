@@ -22,7 +22,7 @@ function authenticateToken(req, res, next) {
 
     const {data, error} = await supabase
       .from('user_profiles')
-      .select('role:user_roles(slug)')
+      .select('*, role:user_roles(slug)')
       .eq('id', userId)
       .single()
 
@@ -31,8 +31,7 @@ function authenticateToken(req, res, next) {
       return renderErrorResponse(res, ['Internal server error'], 500)
     }
     
-    const role = data.role.slug
-    req.user = {...user, role: role};
+    req.user = {...user, user_profile: data};
     next();
   });
 }

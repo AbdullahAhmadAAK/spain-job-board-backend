@@ -1,7 +1,9 @@
 const { renderSuccessResponse, renderErrorResponse } = require('../../helpers/generic/render-response-helpers');
 const { getSupabaseClientFromReq } = require('../../helpers/supabase/generic/get-supabase-client')
 const { validatePagination } = require('../components/pagination')
+
 const { searchJobs } = require('../components/jobs/searchJobs')
+const { fetchJobDetails } = require('../components/jobs/fetchJobDetails')
 const { serializeJob } = require('../../serializers/users/job-serializers')
 
 const express = require('express');
@@ -27,15 +29,14 @@ router.get('/', async (req, res) => {
 
 // View job's details
 router.get('/:jobId', async (req, res) => {
-  // const { email, password } = req.body
-  // const supabase = getSupabaseClientFromReq(req)
+  const jobId = req.params.jobId
+  const supabase = getSupabaseClientFromReq(req)
+  const { data, error } = await fetchJobDetails(supabase, jobId)
 
-  // const { data, error } = await signInSupabase(supabase, email, password)  
-
-  if (false) {
+  if (error) {
     renderErrorResponse(res, [error])
   } else {    
-    renderSuccessResponse(res, {job: {}})
+    renderSuccessResponse(res, {job: serializeJob(data)})
   }
 });
 
