@@ -1,35 +1,35 @@
 const { renderSuccessResponse, renderErrorResponse } = require('../../helpers/generic/render-response-helpers');
 const { getSupabaseClientFromReq } = require('../../helpers/supabase/generic/get-supabase-client')
-const { getReqBody } = require('../../helpers/generic/get-req-body')
+const { findStartEndIndexes, validatePagination } = require('../components/pagination')
+const { searchJobs } = require('../components/jobs/searchJobs')
+const { serializeJob } = require('../../serializers/users/job-serializers')
 
 const express = require('express');
 const router = express.Router();
 
 // View all jobs
 router.get('/', async (req, res) => {
-
   const {page_no, records_per_page} = req.query
+  let params = req.query
 
-  // TODO: validate pages
+  if (!validatePagination(page_no, records_per_page)) {
+    return renderErrorResponse(res, ['Invalid pagination filters'], 500)
+  }
 
+  const { startingIndex, endingIndex } = findStartEndIndexes(page_no, records_per_page)
   const supabase = getSupabaseClientFromReq(req)
 
-  console.log(page_no);
+  params = {...params, startingIndex, endingIndex}
+
+  // console.log('go to searchJobs with these: ', startingIndex, endingIndex);
   
-  const { data, error } = await supabase
-  .from('jobs')
-  .select()
-
-  // const { email, password, name } = getReqBody(req)
-  // const supabase = getSupabaseClientFromReq(req)
-
-  // const { data, error } = await signUpSupabase(supabase, email, password, name)
+  const { data, error } = await searchJobs(supabase, params)
 
   if (error) {
-    console.log('This is the error: ', error)
     renderErrorResponse(res, [error])
   } else {    
-    renderSuccessResponse(res, {jobs: data})
+    const serializedJobs = data.map(job => serializeJob(job))
+    renderSuccessResponse(res, { jobs: serializedJobs })
   }
 });
 

@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
   const { data, error } = await signInSupabase(supabase, email, password)  
 
   if (error) {
-    renderErrorResponse(res, [error])
+    renderErrorResponse(res, ['Invalid credentials'])
   } else {    
     renderSuccessResponse(res, serializeLoginAuthUser(data))
   }
