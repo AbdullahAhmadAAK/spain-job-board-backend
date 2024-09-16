@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 // TODO: rename admin to adminSuperadmin
 const { authenticateToken, authorizeAdmin, authorizeUser } = require('./middleware/auth')
@@ -18,15 +19,19 @@ var app = express();
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
 app.locals.supabase = supabase;
 
-app.use(cors());
-app.use(express.json())   
+app.use(cors({
+  origin: 'http://localhost:3001', // Your React app's origin
+  credentials: true // Allow credentials (cookies) to be sent
+}));
+app.use(express.json())
+app.use(cookieParser())
 
-app.use('/auth/users', usersAuthRouter)
+app.use('/api/auth/users', usersAuthRouter)
 
-app.use('/users/jobs', authenticateToken, authorizeUser, usersJobsRouter)
-app.use('/users/proposals', authenticateToken, authorizeUser, usersProposalsRouter)
+app.use('/api/users/jobs', authenticateToken, authorizeUser, usersJobsRouter)
+app.use('/api/users/proposals', authenticateToken, authorizeUser, usersProposalsRouter)
 
-app.use('/admin/jobs', authenticateToken, authorizeAdmin, adminJobsRouter)
+app.use('/api/admin/jobs', authenticateToken, authorizeAdmin, adminJobsRouter)
 
 
 app.get('/', function (req, res) {

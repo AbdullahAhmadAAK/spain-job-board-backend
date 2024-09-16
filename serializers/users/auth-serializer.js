@@ -1,16 +1,19 @@
+// todo: BRING BOTH TOGETHER BAK!
+
 const serializeLoginAuthUser = (userAuth) => {  
 
-  console.log('this is user auth: ', userAuth);
+  // console.log('this is user auth: ', userAuth);
   
-  const session = userAuth.session
-  const token = formatJwtTokenFromSession(session) 
+  // const session = userAuth.session
+  // const token = formatJwtTokenFromSession(session) 
 
   const userData = userAuth.user
   const user = formatUserDetails(userData)
 
   return {
-    token_details: token,
-    user: user
+    // token_details: token,
+    user: user,
+    message: 'Logged in successfully'
   }
 }
 
@@ -19,7 +22,8 @@ const serializeSignupAuthUser = (userAuth) => {
   const user = formatUserDetails(userData)
 
   return {
-    user: user
+    user: user,
+    message: 'Signed up successfully'
   }
 }
 
