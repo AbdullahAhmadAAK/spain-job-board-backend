@@ -20,11 +20,7 @@ function authenticateToken(req, res, next) {
     const supabase = req.app.locals.supabase
     const userId = user.sub
 
-    const {data, error} = await supabase
-      .from('user_profiles')
-      .select('*, role:user_roles(slug)')
-      .eq('id', userId)
-      .single()
+    const {data, error} = await getUserDetailsForToken(supabase, userId)
 
     if (error) {
       console.error(error)
@@ -36,10 +32,7 @@ function authenticateToken(req, res, next) {
   });
 }
 
-function authorizeAdmin(req, res, next) {
-  console.log('i came to auth admin');
-  
-  
+function authorizeAdminSuperadmin(req, res, next) {  
   if (req.user.user_profile.role.slug !== 'admin' && req.user.user_profile.role.slug !== 'superadmin') {
     return renderErrorResponse(res, ['Unauthorized'], 401)
   }
@@ -59,5 +52,12 @@ function authorizeUser(req, res, next) {
   }
 }
 
+async function getUserDetailsForToken (supabase, userId) {
+  const { data, error } = await supabase
+  .from('user_profiles')
+  .select('*, role:user_roles(slug)')
+  .eq('id', userId)
+  .single()
+}
 
-module.exports = { authenticateToken, authorizeAdmin, authorizeUser };
+module.exports = { authenticateToken, authorizeAdminSuperadmin, authorizeUser };

@@ -1,4 +1,5 @@
-const { findStartEndIndexes } = require('../pagination')
+const { findStartEndIndexes } = require('../pagination');
+const { formatProposalsDataInHash } = require('./jobCommonMethods');
 
 // TODO: simplify and separate for users admins and superadmin
 const searchJobs = async (supabase, params) => {
@@ -27,15 +28,6 @@ const searchJobs = async (supabase, params) => {
 // .select('id, title, description, min_budget, max_budget, difficulty_rating:job_difficulty_ratings(title, rating), posted_by:user_profiles!jobs_posted_by_id_fkey(id, name, email), status:statuses(*)')
 
 // HELPERS
-const formatProposalsDataInHash = (data) => {
-  return data.map(job => {
-    return {
-      ...job,
-      proposals_count: job.proposals.length,
-      proposals: undefined
-    }
-  })
-}
 
 const applyMinBudgetFilter = (query, minBudget) => {  
   if (!isEmptyFilter(minBudget)) {

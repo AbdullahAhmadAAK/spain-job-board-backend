@@ -1,11 +1,12 @@
 const { renderSuccessResponse, renderErrorResponse } = require('../../helpers/generic/render-response-helpers');
-const { serializeLoginAuthUser, serializeSignupAuthUser } = require('../../serializers/users/auth-serializer')
+const { serializeAuthUser } = require('../../serializers/users/auth-serializer')
 const { getSupabaseClientFromReq } = require('../../helpers/supabase/generic/get-supabase-client')
 const { signInSupabase, signUpSupabase } = require('../../helpers/supabase/auth/user-auth-helpers')
 const { setTokensInCookie, setAccessTokenInCookie } = require('../../helpers/generic/token-cookies')
 const { getReqBody } = require('../../helpers/generic/get-req-body')
 
 const express = require('express');
+const { REFRESH_TOKEN_COOKIE_NAME } = require('../../config/cookies');
 const router = express.Router();
 
 // Sign up with email and password
@@ -16,10 +17,11 @@ router.post('/signup', async (req, res) => {
   const { data, error } = await signUpSupabase(supabase, email, password, name)
 
   if (error) {
-    console.log('This is the error: ', error)
+    // TODO: error logger and general logger methods
+    console.error(error)
     renderErrorResponse(res, ['Failed to sign up'])
   } else {    
-    renderSuccessResponse(res, serializeSignupAuthUser(data))
+    renderSuccessResponse(res, serializeAuthUser(data))
   }
 });
 
@@ -34,14 +36,12 @@ router.post('/login', async (req, res) => {
     renderErrorResponse(res, ['Invalid credentials'])
   } else {
     setTokensInCookie(res, data)
-    renderSuccessResponse(res, serializeLoginAuthUser(data))
+    renderSuccessResponse(res, serializeAuthUser(data))
   }
 });
 
-// TODO: not even sure if this is needed
 router.post('/refreshToken', async (req, res) => {
-  // TODO: constantize refresh_token cookie name, access_token cookie name
-  const { refresh_token } = req.cookies
+  const refresh_token = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
   const supabase = req.app.locals.supabase  
 
   // TODO: what if refresh token not here?

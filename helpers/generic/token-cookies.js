@@ -1,41 +1,20 @@
-// TODO: modularize this ffs
+const { generateAccessTokenConfig, refreshTokenConfig } = require("../../config/access-token-config")
+const { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } = require('../../config/cookies')
+
 const setTokensInCookie = (res, data) => {
-  const session = data.session
-  const {access_token, refresh_token, expires_in} = session
-  
-  const expiresInMilliseconds = expires_in * 1000 // should be according to what we set in supabase!
+  const { access_token, refresh_token, expires_in } = data.session
 
-  res.cookie('access_token', access_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: expiresInMilliseconds, // 60 mins,
-    sameSite: 'Lax', // 'Strict',
-    path: '/'
-  });
+  res.cookie(REFRESH_TOKEN_COOKIE_NAME, refresh_token, refreshTokenConfig);
 
-  res.cookie('refresh_token', refresh_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 2592000000 , // 30 days, TODO: constantize!
-    sameSite: 'Lax', // 'Strict',
-    path: '/'
-  });
+  const accessTokenConfig = generateAccessTokenConfig(expires_in)
+  res.cookie(ACCESS_TOKEN_COOKIE_NAME, access_token, accessTokenConfig);
 }
 
 const setAccessTokenInCookie = (res, data) => {
-  const session = data.session
-  const {access_token, expires_in} = session
+  const { access_token, expires_in } = data.session
   
-  const expiresInMilliseconds = expires_in * 1000 // should be according to what we set in supabase!
-
-  res.cookie('access_token', access_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: expiresInMilliseconds, // 60 mins,
-    sameSite: 'Lax', // 'Strict',
-    path: '/'
-  });
-
+  const accessTokenConfig = generateAccessTokenConfig(expires_in)
+  res.cookie(ACCESS_TOKEN_COOKIE_NAME, access_token, accessTokenConfig);
 }
 
 module.exports = {
