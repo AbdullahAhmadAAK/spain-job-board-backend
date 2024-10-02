@@ -44,14 +44,11 @@ router.post('/refreshToken', async (req, res) => {
   const refresh_token = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
   const supabase = req.app.locals.supabase  
 
-  // TODO: what if refresh token not here?
   const { data, error } = await supabase.auth.refreshSession({ refresh_token })
   
   if (error) {
     renderErrorResponse(res, ['Failed to refresh token'], 500)
   } else {
-    const { session, user } = data
-    // TODO set new cookie for access token too!
     setAccessTokenInCookie(res, data)
     renderSuccessResponse(res, {message: 'Token refreshed successfully'})
   }  
