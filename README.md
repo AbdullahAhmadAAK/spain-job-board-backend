@@ -3,7 +3,7 @@ Spain-Based Job Board App
 
 **Project Description:**
 
-The client requested a job board app designed for admin-posted jobs in Spain. The app, similar to LinkedIn, allows only admins to post jobs, while users can apply to the jobs posted by the admins. Admins will then select candidates based on the applications.
+The client requested a job board app designed for admin-posted jobs in Spain. The app, similar to Upwork, allows only admins to post jobs, while users can apply to the jobs posted by the admins. Admins will then select candidates based on the applications.
 
 Development was paused during the creation of the job module's backend, pending the client's advance payment, which was expected within 1-2 weeks. As a result, the repository includes a completed authentication module, with the job module being a work-in-progress in a separate branch.
 
